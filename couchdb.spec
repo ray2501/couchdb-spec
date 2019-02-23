@@ -55,11 +55,11 @@ install -D -m 644 %{S:1} %{buildroot}%{_unitdir}/couchdb.service
 %pre -n apache-couchdb
 if ! id -u couchdb > /dev/null 2>&1; then
     useradd -U -s /bin/nologin -d /opt/couchdb couchdb || /bin/true
-    chown -R couchdb:couchdb /opt/couchdb
 fi
 %service_add_pre couchdb.service
 
 %post -n apache-couchdb
+chown -R couchdb:couchdb /opt/couchdb
 %service_add_post couchdb.service
 
 %preun -n apache-couchdb

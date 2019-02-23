@@ -1,0 +1,10 @@
+[Unit]
+Description=Apache CouchDB Server
+
+[Service]
+ExecStart=/opt/couchdb/bin/couchdb
+User=couchdb
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

@@ -10,6 +10,7 @@ Group:		Applications/Servers
 License:	Apache 2.0
 URL:		http://www.couchdb.org
 Source0:	%{name}-%{version}.tar.gz
+Source1:	couchdb.service
 
 # These dependencies are for EL based platforms.
 BuildRequires: autoconf
@@ -44,33 +45,29 @@ make release
 %install
 mkdir -p %{buildroot}/opt
 cp -r rel/couchdb %{buildroot}/opt/couchdb
+install -D -m 644 %{S:1} %{buildroot}%{_unitdir}/couchdb.service
 
 
 %files
 /opt/couchdb
+%{_unitdir}/couchdb.service
 
-%post
-useradd -U -s /bin/nologin -d /opt/couchdb couchdb || /bin/true
-chown -R couchdb:couchdb /opt/couchdb
-
-
-IS_SYSTEMD=$((pidof systemd 2>&1 > /dev/null)  && echo "yes" || echo "no")
-if [ "$IS_SYSTEMD" == "yes" ]; then
-cat <<EOF > /etc/systemd/system/couchdb.service
-[Unit]
-Description=Apache CouchDB Server
-
-[Service]
-ExecStart=/opt/couchdb/bin/couchdb
-User=couchdb
-Type=simple
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-systemctl daemon-reload
+%pre -n apache-couchdb
+if ! id -u couchdb > /dev/null 2>&1; then
+    useradd -U -s /bin/nologin -d /opt/couchdb couchdb || /bin/true
+    chown -R couchdb:couchdb /opt/couchdb
 fi
+%service_add_pre couchdb.service
+
+%post -n apache-couchdb
+%service_add_post couchdb.service
+
+%preun -n apache-couchdb
+%service_del_preun couchdb.service
+
+%postun -n apache-couchdb
+%service_del_postun couchdb.service
+
 
 %changelog
 * Sun Jul 22 2018 Danilo CHang <ray2501@gmail.com>

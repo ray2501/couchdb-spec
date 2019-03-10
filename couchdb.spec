@@ -3,7 +3,7 @@
 #
 
 Name:		apache-couchdb
-Version:	2.3.0
+Version:	2.3.1
 Release:	0
 Summary:	Apache CouchDB Server
 Group:		Applications/Servers

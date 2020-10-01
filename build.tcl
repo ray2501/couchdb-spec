@@ -4,8 +4,8 @@ package require http
 package require tls
 
 set arch "x86_64"
-set fileurl "http://ftp.tc.edu.tw/pub/Apache/couchdb/source/3.1.0/apache-couchdb-3.1.0.tar.gz"
-set base "apache-couchdb-3.1.0"
+set fileurl "http://ftp.tc.edu.tw/pub/Apache/couchdb/source/3.1.1/apache-couchdb-3.1.1.tar.gz"
+set base "apache-couchdb-3.1.1"
 
 set var [list wget $fileurl -O $base.tar.gz]
 exec >@stdout 2>@stderr {*}$var
